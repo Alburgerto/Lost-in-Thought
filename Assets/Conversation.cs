@@ -15,11 +15,25 @@ public class Conversation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DisplayLine(Character.Computer, 0);
+        StartCoroutine(DisplayLine(Character.Computer, 0));
     }
 
-    private void DisplayLine(Character l_char, int l_index, float l_time = 1.5f)
+    IEnumerator DisplayLine(Character l_char, int l_index, float l_time = 1.5f)
     {
+        if (m_computerText.text != "")
+        {
+            yield return StartCoroutine(FadeText(false, l_char, l_time));
+        }
+
+        if (l_char == Character.Computer)
+        {
+            m_computerText.text = m_computerLines[l_index];
+        }
+        else
+        {
+            m_playerText.text = m_playerLines[l_index];
+        }
+
         StartCoroutine(FadeText(true, l_char, l_time));
     }
 
@@ -48,6 +62,5 @@ public class Conversation : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
-        textColor.a = alphaGoal;
     }
 }
