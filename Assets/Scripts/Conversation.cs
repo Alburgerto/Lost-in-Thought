@@ -9,12 +9,14 @@ public class Conversation : MonoBehaviour
 
     [SerializeField] private string[] m_computerLines;
     [SerializeField] private string[] m_playerLines;
-    [SerializeField] private TextMeshProUGUI m_wordPopup;
+    [SerializeField] private GameObject m_wordContainer;
 
     public TextMeshProUGUI m_computerText;
     public TextMeshProUGUI m_playerText;
     public float m_wordSpawnTime;
-    public float m_wordSpacingOffset;
+    public float m_wordScreenDistanceOffset;
+    public float m_wordDistanceOffset;
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,20 +45,39 @@ public class Conversation : MonoBehaviour
         }
     }
 
+    private bool IsWordOverlapping(List<Vector3> l_list, Vector3 l_location)
+    {
+        foreach (var loc in l_list)
+        {
+            if (Mathf.Abs(l_location.x - loc.x ) > m_wordDistanceOffset || Mathf.Abs(l_location.y - loc.y) > m_wordDistanceOffset)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     IEnumerator SpawnWordPopups(string l_line)
     {
         string[] words = l_line.Split(' ');
-        foreach (var word in words)
+        List<Vector3> wordPositions = new List<Vector3>(); 
+        for (int i = 0; i < words.Length; ++i)
         {
-            Vector3 spawnLocation = new Vector3(Random.Range(m_wordSpacingOffset, Screen.width - m_wordSpacingOffset), Random.Range(m_wordSpacingOffset, Screen.height - m_wordSpacingOffset), 0);
-            Debug.Log(spawnLocation);
-            //TextMeshProUGUI wordPopup = Instantiate(m_wordPopup, transform.parent);
-            GameObject textParent = Instantiate(new GameObject(), transform.parent);
-            TextMeshProUGUI wordPopup = Instantiate(m_wordPopup, textParent.transform);
-            textParent.name = "WordContainer";
-            textParent.transform.position = spawnLocation;
-            wordPopup.text = word;
-            wordPopup.GetComponent<Animation>().Play();
+            Vector3 spawnLocation = new Vector3(Random.Range(m_wordScreenDistanceOffset, Screen.width - m_wordScreenDistanceOffset), Random.Range(m_wordScreenDistanceOffset, Screen.height - m_wordScreenDistanceOffset), 0);
+            //if (IsWordOverlapping(wordPositions, spawnLocation))
+            //{
+            //    Debug.Log(i);
+            //    continue;
+            //}
+            //wordPositions.Add(spawnLocation);
+            Debug.Log(wordPositions.Count);
+            GameObject wordContainer = Instantiate(m_wordContainer, transform.parent);
+            wordContainer.transform.position = spawnLocation;
+            TextMeshProUGUI tmpText = wordContainer.GetComponentInChildren<TextMeshProUGUI>();
+            tmpText.text = words[i];
+
+            yield return FadeText(true, tmpText, 2);
+
             yield return new WaitForSeconds(m_wordSpawnTime);
         }
     }
@@ -67,15 +88,20 @@ public class Conversation : MonoBehaviour
         float until = Time.time + l_time;
         int alphaFrom = l_fadeIn ? 0 : 1;
         int alphaGoal = l_fadeIn ? 1 : 0;
-        Color textColor;
+        Color textColor = l_textBox.color;
+        textColor.a = l_fadeIn ? 0 : 1;
+        l_textBox.color = textColor;
+
         while (time < until)
         {
             textColor = l_textBox.color;
             textColor.a = Mathf.Lerp(alphaFrom, alphaGoal, Time.time / l_time);
-            m_playerText.color = textColor;
-
+            l_textBox.color = textColor;
             time += Time.deltaTime;
             yield return null;
         }
+        textColor.a = l_fadeIn ? 1 : 0;
+        l_textBox.color = textColor;
+
     }
 }

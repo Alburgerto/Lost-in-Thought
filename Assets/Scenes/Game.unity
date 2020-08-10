@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: PLAYER TEXT
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -639,7 +639,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: COMPUTER TEXT
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -881,8 +881,9 @@ MonoBehaviour:
   - The whole world is a mess right now, you are not alone.
   - 
   - 
-  m_wordPopup: {fileID: 1044542592567461382, guid: 424d7f9318cbcae408c87465ef6aa9c7, type: 3}
+  m_wordContainer: {fileID: 4869341955961272795, guid: a5f6bb68dfcf7974fba386567718e6e9, type: 3}
   m_computerText: {fileID: 1057132697}
   m_playerText: {fileID: 395322985}
   m_wordSpawnTime: 1.5
-  m_wordSpacingOffset: 25
+  m_wordScreenDistanceOffset: 30
+  m_wordDistanceOffset: 30
