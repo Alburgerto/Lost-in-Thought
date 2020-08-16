@@ -10,36 +10,52 @@ public class Conversation : MonoBehaviour
     [SerializeField] private string[] m_computerLines;
     [SerializeField] private string[] m_playerLines;
     [SerializeField] private GameObject m_wordContainer;
+    private int m_currentLine = 0;
 
+    public TrailRenderer m_trail;
     public TextMeshProUGUI m_computerText;
     public TextMeshProUGUI m_playerText;
     public float m_wordSpawnTime;
     public float m_wordScreenDistanceOffset;
     public float m_wordDistanceOffset;
+    public float m_touchWordDistance;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(DisplayLine(Character.Computer, 0));
+        StartCoroutine(RunConversation());
+    }
+
+    private IEnumerator RunConversation()
+    {
+        while (true)
+        {
+            if (m_computerLines.Length > m_currentLine)
+            {
+                yield return DisplayLine(Character.Computer, m_currentLine);
+            }
+            if (m_playerLines.Length > m_currentLine)
+            {
+                yield return PlayerInput(m_playerLines[m_currentLine]);
+                yield return DisplayLine(Character.Player, m_currentLine);
+            }
+            ++m_currentLine;
+        }
     }
 
     private IEnumerator DisplayLine(Character l_char, int l_index, float l_time = 1)
     {
-        //if (m_computerText.text != "")
-        //{
-        //    yield return StartCoroutine(FadeText(false, m_computerText, l_time));
-        //}
-        yield return StartCoroutine(SpawnWordPopups("^^ :3 jaja"));
         if (l_char == Character.Computer)
         {
+            yield return FadeText(false, m_playerText, l_time);
             m_computerText.text = m_computerLines[l_index];
-            StartCoroutine(FadeText(true, m_computerText, l_time));
-
+            yield return FadeText(true, m_computerText, l_time);
         }
         else
         {
+            yield return FadeText(false, m_computerText, l_time);
             m_playerText.text = m_playerLines[l_index];
-            StartCoroutine(FadeText(true, m_playerText, l_time));
+            yield return FadeText(true, m_playerText, l_time);
         }
     }
 
@@ -55,10 +71,12 @@ public class Conversation : MonoBehaviour
         return false;
     }
 
-    private IEnumerator SpawnWordPopups(string l_line)
+    private IEnumerator PlayerInput(string l_line)
     {
+        // SPAWN WORDS
         string[] words = l_line.Split(' ');
-        List<Vector3> wordPositions = new List<Vector3>(); 
+        List<Vector3> wordPositions = new List<Vector3>();
+        List<TextMeshProUGUI> wordListUI = new List<TextMeshProUGUI>();
         for (int i = 0; i < words.Length; ++i)
         {
             Vector3 spawnLocation = new Vector3(Random.Range(m_wordScreenDistanceOffset, Screen.width - m_wordScreenDistanceOffset), Random.Range(m_wordScreenDistanceOffset, Screen.height - m_wordScreenDistanceOffset), 0);
@@ -71,11 +89,41 @@ public class Conversation : MonoBehaviour
             GameObject wordContainer = Instantiate(m_wordContainer, transform.parent);
             wordContainer.transform.position = spawnLocation;
             TextMeshProUGUI tmpText = wordContainer.GetComponentInChildren<TextMeshProUGUI>();
+            wordListUI.Add(tmpText);
             tmpText.text = words[i];
             
-            yield return FadeText(true, tmpText, 1.5f);
-            
+            yield return FadeText(true, tmpText, 0.75f);
         }
+
+        // CONNECT WORDS WITH INPUT
+        int touchedWords = 0;
+        Touch touch;
+        while (touchedWords < words.Length)
+        {
+            if (Input.touchCount > 0)
+            {
+                touch = Input.GetTouch(0);
+                m_trail.transform.position = touch.position;
+                if (Mathf.Abs(touch.position.x - wordListUI[touchedWords].transform.position.x) < m_touchWordDistance && 
+                    Mathf.Abs(touch.position.y - wordListUI[touchedWords].transform.position.y) < m_touchWordDistance)
+                {
+                    touchedWords++;
+                }
+            }
+            else
+            {
+                touchedWords = 0;
+            }
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        // DESPAWN WORDS
+        foreach (var word in wordListUI)
+        {
+            yield return FadeText(false, word, 0.25f);
+            Destroy(word.transform.parent.gameObject);
+        }
+
     }
 
     private IEnumerator FadeText(bool l_fadeIn, TextMeshProUGUI l_textBox, float l_duration)

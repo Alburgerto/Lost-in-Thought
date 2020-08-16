@@ -157,8 +157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -286, y: 109.79999}
-  m_SizeDelta: {x: 523.3915, y: 145.41815}
+  m_AnchoredPosition: {x: -248.2, y: 109.79999}
+  m_SizeDelta: {x: 447.8717, y: 145.41815}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &395322985
 MonoBehaviour:
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PLAYER TEXT
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -189,8 +189,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4284140287
-  m_fontColor: {r: 1, g: 0.7910674, b: 0.3537736, a: 1}
+    rgba: 5950207
+  m_fontColor: {r: 1, g: 0.7910674, b: 0.3537736, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -472,7 +472,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 45, y: -179}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!96 &749503201
@@ -616,8 +616,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 271, y: -96}
-  m_SizeDelta: {x: 506.8617, y: 144.28113}
+  m_AnchoredPosition: {x: 243.8, y: -112.6}
+  m_SizeDelta: {x: 452.48755, y: 177.50983}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1057132697
 MonoBehaviour:
@@ -639,7 +639,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: COMPUTER TEXT
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -878,12 +878,14 @@ MonoBehaviour:
   - I feel alone.
   - 
   m_playerLines:
-  - The whole world is a mess right now, you are not alone.
-  - 
+  - You are not alone
+  - "Que no co\xF1o"
   - 
   m_wordContainer: {fileID: 4869341955961272795, guid: a5f6bb68dfcf7974fba386567718e6e9, type: 3}
+  m_trail: {fileID: 749503201}
   m_computerText: {fileID: 1057132697}
   m_playerText: {fileID: 395322985}
   m_wordSpawnTime: 1
   m_wordScreenDistanceOffset: 80
   m_wordDistanceOffset: 40
+  m_touchWordDistance: 40
