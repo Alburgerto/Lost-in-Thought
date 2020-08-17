@@ -12,7 +12,7 @@ public class Conversation : MonoBehaviour
     [SerializeField] private GameObject m_wordContainer;
     private int m_currentLine = 0;
 
-    public TrailRenderer m_trail;
+    public RectTransform m_trailRT;
     public TextMeshProUGUI m_computerText;
     public TextMeshProUGUI m_playerText;
     public float m_wordSpawnTime;
@@ -33,14 +33,21 @@ public class Conversation : MonoBehaviour
             if (m_computerLines.Length > m_currentLine)
             {
                 yield return DisplayLine(Character.Computer, m_currentLine);
+            } else
+            {
+                break;
             }
             if (m_playerLines.Length > m_currentLine)
             {
                 yield return PlayerInput(m_playerLines[m_currentLine]);
                 yield return DisplayLine(Character.Player, m_currentLine);
+            } else
+            {
+                break;
             }
             ++m_currentLine;
         }
+        
     }
 
     private IEnumerator DisplayLine(Character l_char, int l_index, float l_time = 1)
@@ -103,7 +110,7 @@ public class Conversation : MonoBehaviour
             if (Input.touchCount > 0)
             {
                 touch = Input.GetTouch(0);
-                m_trail.transform.position = touch.position;
+                m_trailRT.anchoredPosition = new Vector2(touch.position.x - Screen.width / 2, touch.position.y - Screen.height / 2);
                 if (Mathf.Abs(touch.position.x - wordListUI[touchedWords].transform.position.x) < m_touchWordDistance && 
                     Mathf.Abs(touch.position.y - wordListUI[touchedWords].transform.position.y) < m_touchWordDistance)
                 {

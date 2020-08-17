@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Trail
+    uniqueID: 957493949
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
