@@ -974,13 +974,15 @@ MonoBehaviour:
   m_computerLines:
   - Sorry, I was lost in thought. What did you just say?
   - I feel alone.
-  - 
+  - Ke te pire
   m_playerLines:
   - You are not alone
   - "Que no co\xF1o"
   - 
   m_wordContainer: {fileID: 4869341955961272795, guid: a5f6bb68dfcf7974fba386567718e6e9, type: 3}
-  m_trail: {fileID: 749503201}
+  m_notSelectedColor: {r: 0.8666667, g: 0.33333334, b: 0.33333334, a: 1}
+  m_selectedColor: {r: 0.990566, g: 0.19157171, b: 0.19157171, a: 1}
+  m_trailRT: {fileID: 749503200}
   m_computerText: {fileID: 1057132697}
   m_playerText: {fileID: 395322985}
   m_wordSpawnTime: 1

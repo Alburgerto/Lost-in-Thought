@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Conversation : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class Conversation : MonoBehaviour
     [SerializeField] private GameObject m_wordContainer;
     private int m_currentLine = 0;
 
+    public Image m_blackPanel;
+    public Color m_notSelectedColor;
+    public Color m_selectedColor;
     public RectTransform m_trailRT;
     public TextMeshProUGUI m_computerText;
     public TextMeshProUGUI m_playerText;
@@ -33,18 +37,26 @@ public class Conversation : MonoBehaviour
             if (m_computerLines.Length > m_currentLine)
             {
                 yield return DisplayLine(Character.Computer, m_currentLine);
-            } else
+                yield return new WaitForSeconds(1);
+            }
+            else
             {
                 break;
             }
+
             if (m_playerLines.Length > m_currentLine)
             {
+                StartCoroutine(FadePanel(true, m_blackPanel, 0.75f));
                 yield return PlayerInput(m_playerLines[m_currentLine]);
+                StartCoroutine(FadePanel(false, m_blackPanel, 0.75f));
                 yield return DisplayLine(Character.Player, m_currentLine);
-            } else
+                yield return new WaitForSeconds(1);
+            }
+            else
             {
                 break;
             }
+
             ++m_currentLine;
         }
         
@@ -96,6 +108,7 @@ public class Conversation : MonoBehaviour
             GameObject wordContainer = Instantiate(m_wordContainer, transform.parent);
             wordContainer.transform.position = spawnLocation;
             TextMeshProUGUI tmpText = wordContainer.GetComponentInChildren<TextMeshProUGUI>();
+            tmpText.color = m_notSelectedColor;
             wordListUI.Add(tmpText);
             tmpText.text = words[i];
             
@@ -114,12 +127,17 @@ public class Conversation : MonoBehaviour
                 if (Mathf.Abs(touch.position.x - wordListUI[touchedWords].transform.position.x) < m_touchWordDistance && 
                     Mathf.Abs(touch.position.y - wordListUI[touchedWords].transform.position.y) < m_touchWordDistance)
                 {
+                    wordListUI[touchedWords].color = m_selectedColor;
                     touchedWords++;
                 }
             }
             else
             {
                 touchedWords = 0;
+                foreach (TextMeshProUGUI word in wordListUI)
+                {
+                    word.color = m_notSelectedColor;
+                }
             }
             yield return new WaitForSeconds(0.05f);
         }
@@ -149,5 +167,23 @@ public class Conversation : MonoBehaviour
         }
         textColor.a = alphaGoal;
         l_textBox.color = textColor;
+    }
+
+    private IEnumerator FadePanel(bool l_fadeIn, Image l_panel, float l_duration)
+    {
+        float start = Time.time;
+        float until = start + l_duration;
+        float alphaFrom = l_fadeIn ? 0 : 0.5f;
+        float alphaGoal = 0.5f - alphaFrom;
+        Color textColor = l_panel.color;
+
+        while (Time.time < until)
+        {
+            textColor.a = Mathf.Lerp(alphaFrom, alphaGoal, (Time.time - start) / l_duration);
+            l_panel.color = textColor;
+            yield return null;
+        }
+        textColor.a = alphaGoal;
+        l_panel.color = textColor;
     }
 }
