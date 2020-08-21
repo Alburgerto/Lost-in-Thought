@@ -12,19 +12,19 @@ public class Conversation : MonoBehaviour
     [SerializeField] private string[] m_playerLines;
     [SerializeField] private GameObject m_wordContainer;
     private int m_currentLine = 0;
-
+    
     public Image m_blackPanel;
     public Color m_notSelectedColor;
     public Color m_selectedColor;
     public RectTransform m_trailRT;
+    public TextMeshProUGUI m_endingText;
     public TextMeshProUGUI m_computerText;
     public TextMeshProUGUI m_playerText;
     public float m_wordSpawnTime;
     public float m_wordScreenDistanceOffset;
     public float m_wordDistanceOffset;
     public float m_touchWordDistance;
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         StartCoroutine(RunConversation());
@@ -37,7 +37,7 @@ public class Conversation : MonoBehaviour
             if (m_computerLines.Length > m_currentLine)
             {
                 yield return DisplayLine(Character.Computer, m_currentLine);
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(1.5f);
             }
             else
             {
@@ -59,7 +59,8 @@ public class Conversation : MonoBehaviour
 
             ++m_currentLine;
         }
-        
+        StartCoroutine(FadePanel(true, m_blackPanel, 0.75f));
+        yield return FadeText(true, m_endingText, 1);
     }
 
     private IEnumerator DisplayLine(Character l_char, int l_index, float l_time = 1)
